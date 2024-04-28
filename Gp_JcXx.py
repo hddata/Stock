@@ -28,6 +28,26 @@ def hq_gp_jcxx(zqdm):
     print(gp_jcxx["code_name"][0].find('STT'))
     return gp_jcxx
 
+
+def pd_kcbcyb(zqdm):
+    '''
+    判断是否科创板创业板
+    '''
+    #是否科创板
+    sfkcb=0
+    #是否创业板
+    sfcyb=0
+    #是否科创板创业板
+    sfkcbcyb=0
+    if zqdm[3:6]=='688':
+        sfkcb=1
+        sfkcbcyb=1
+    elif zqdm[3:6]=='300':
+        sfcyb=1
+        sfkcbcyb=1
+    return sfkcbcyb
+
+
 def pd_jyr(sj_rq):
     '''
     判断是否交易日
@@ -44,9 +64,10 @@ def pd_jyr(sj_rq):
         # 获取一条记录，将记录合并在一起
         data_list.append(rs.get_row_data())
     result = pd.DataFrame(data_list, columns=rs.fields)
+    # print(result['is_trading_day'][0])
     return result['is_trading_day'][0]
 
-@dlbs
+# @dlbs
 def hq_sgjyr(sj_rq):
     '''
     获取上个交易日
@@ -103,13 +124,14 @@ def XzGpMz(sj_rq):
     bs.logout()
 
 
+
 if __name__ == '__main__':
     #### 登陆系统 ####
     lg = bs.login()
     # XzGpMz('2023-11-29')
-    # hq_gp_jcxx('sh.600864')
+    hq_gp_jcxx('sh.600864')
     # GpJcXx('sz.002156')
-    pd_jyr('2024-03-04')
-    hq_sgjyr('2024-03-04')
+    # pd_jyr('2024-03-04')
+    # hq_sgjyr('2024-03-04')
     #### 登出系统 ####
     bs.logout()

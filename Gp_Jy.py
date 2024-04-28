@@ -17,15 +17,15 @@ class GpJx(ZQ):
     返回值：
         
     '''
-    def __init__(self,zqdm,data_date):
+    def __init__(self,zqdm,sj_rq):
         self.zqdm=zqdm
-        self.data_date = data_date
+        self.sj_rq = sj_rq
         self.gp = bs.query_history_k_data_plus(
             self.zqdm,
             # "date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,isST",
             "date,code,open,high,low,close,pctChg,isST",
-            start_date=self.data_date,
-            end_date=self.data_date,
+            start_date=self.sj_rq,
+            end_date=self.sj_rq,
             frequency="d",
             adjustflag="3").get_data()
         # print(self.gp)

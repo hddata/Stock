@@ -3,12 +3,14 @@ import datetime
 from unicodedata import decimal
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import MultipleLocator, close
+import re
 
 import baostock as bs
 from Gp_Jy import GpJx
 from Gp_ZjCw import GpZjCw
 from utils import ZQ,dlbs
 from Gp_JcXx import hq_sgjyr
+from GpSs_Xx import GpSsXx
 
 
 class GmGp(ZQ):
@@ -22,7 +24,7 @@ class GmGp(ZQ):
     def __init__(self,sj_rq):
         self.sj_rq = sj_rq
 
-    @dlbs
+    # @dlbs
     def hq_bjyr(self,dqzqdm,dqzqgf):
         '''
         获取_本金余额（当前）
@@ -47,7 +49,7 @@ class GmGp(ZQ):
         # print(bjye)
         return bjye
 
-    @dlbs
+    # @dlbs
     def hq_kgmgp_qd(self,bjye):
         '''
         获取_可购买股票_清单_非ST股票模型
@@ -129,16 +131,57 @@ class SjGmGp(ZQ):
         df = pd.read_csv(mrgmckqd) 
         print(df['gpcode'].sample(n=1))
 
+class ZddfGmGp(ZQ):
+    '''
+    最大跌幅购买股票。
+    参数：
+        sj_rq: string, 数据日期
+    返回值：
+        
+    '''
+    def __init__(self,sj_rq):
+        self.sj_rq = sj_rq
+
+    def hq_zddfgp(self):
+        '''
+        最大跌幅股票。
+        '''
+        #可购买清单
+        kgmqd="C:\SoftwareZ\SProjects\PyProjects\Stock\data\k_gm_data_"+self.sj_rq+".csv"
+        kgmqd_df = pd.read_csv(kgmqd) 
+        
+        #可购买证券号清单
+        kgmzqhqd=','.join(kgmqd_df['gpcode'])
+        #替换综合指数
+        kgmzqhqd=kgmzqhqd.replace('sh.000001,','')
+        # print(kgmzqhqd)
+        #因为科创板，创业板目前买不了，暂时剔除688科创板，300创业板
+        kgmzqhqd=re.sub(r'(sz\.300|sh\.688)\d+(,\s*)?', '', kgmzqhqd)
+
+        #最大跌幅股票
+        zddfgp = GpSsXx(kgmzqhqd).hq_gpzss_dfzd()  
+        
+        return zddfgp
+
+
 if __name__ == '__main__':
     # bjye=GmGp('sz.002156','2023-12-26').hq_bjyr()
     # ygmgq=GmGp('2024-01-15')
     # sz.002156 200
-    sjrq='2024-03-04'
-    bjye=GmGp(sjrq).hq_bjyr('sz.003008',200)
+
+    
+    sjrq='2024-04-25'
+
+    bs.login()
+    # bjye=GmGp(sjrq).hq_bjyr('sz.003008',200)
+    bjye=5000
     print(bjye)
     gm_qd=GmGp(sjrq).hq_kgmgp_qd(bjye) 
     #每日购买参考清单
     mrgmckqd="C:\SoftwareZ\SProjects\PyProjects\Stock\data\k_gm_data_"+sjrq+".csv"
     gm_qd.to_csv(mrgmckqd)
+    bs.logout()
 
+    # ZddfGmGp(sjrq).hq_zddfgp() 
 
+    

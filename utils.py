@@ -93,6 +93,18 @@ class ZQ:
         self.sj_fw = sj_fw
         self.sj_rq = sj_rq
 
+class ZQSS:
+    '''
+    证券实时[实时证券](ZQSS)基础类（1）：
+        1.定义证券模型跑批数据范围(CN-中国)
+    参数：
+        sj_fw: string, 证券模型基础数据范围
+    '''
+
+    def __init__(self,sj_fw=None):
+        self.sj_fw = sj_fw
+
+
 
 if __name__ == '__main__':
     # print(get_gp_close.__doc__)

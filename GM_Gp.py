@@ -149,7 +149,7 @@ class ZddfGmGp(ZQ):
         #可购买清单
         kgmqd="C:\SoftwareZ\SProjects\PyProjects\Stock\data\k_gm_data_"+self.sj_rq+".csv"
         kgmqd_df = pd.read_csv(kgmqd) 
-        
+       
         #可购买证券号清单
         kgmzqhqd=','.join(kgmqd_df['gpcode'])
         #替换综合指数
@@ -157,11 +157,17 @@ class ZddfGmGp(ZQ):
         # print(kgmzqhqd)
         #因为科创板，创业板目前买不了，暂时剔除688科创板，300创业板
         kgmzqhqd=re.sub(r'(sz\.300|sh\.688)\d+(,\s*)?', '', kgmzqhqd)
-
+        
         #最大跌幅股票
         zddfgp = GpSsXx(kgmzqhqd).hq_gpzss_dfzd()  
         
-        return zddfgp
+        #打印最大跌幅股票基础信息
+        print(GpSsXx(zddfgp+',sh.000001').hq_gpzss_jcxx())
+        
+        #打印最大跌幅股票及其索引
+        print(kgmqd_df[kgmqd_df['gpcode']==zddfgp]['gpcode'].to_string(index=True))
+
+
 
 
 if __name__ == '__main__':
@@ -172,16 +178,16 @@ if __name__ == '__main__':
     
     sjrq='2024-04-25'
 
-    bs.login()
-    # bjye=GmGp(sjrq).hq_bjyr('sz.003008',200)
-    bjye=5000
-    print(bjye)
-    gm_qd=GmGp(sjrq).hq_kgmgp_qd(bjye) 
-    #每日购买参考清单
-    mrgmckqd="C:\SoftwareZ\SProjects\PyProjects\Stock\data\k_gm_data_"+sjrq+".csv"
-    gm_qd.to_csv(mrgmckqd)
-    bs.logout()
+    # bs.login()
+    # # bjye=GmGp(sjrq).hq_bjyr('sz.003008',200)
+    # bjye=5000
+    # print(bjye)
+    # gm_qd=GmGp(sjrq).hq_kgmgp_qd(bjye) 
+    # #每日购买参考清单
+    # mrgmckqd="C:\SoftwareZ\SProjects\PyProjects\Stock\data\k_gm_data_"+sjrq+".csv"
+    # gm_qd.to_csv(mrgmckqd)
+    # bs.logout()
 
-    # ZddfGmGp(sjrq).hq_zddfgp() 
+    ZddfGmGp(sjrq).hq_zddfgp() 
 
     

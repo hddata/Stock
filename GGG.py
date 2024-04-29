@@ -53,7 +53,7 @@ if __name__ == '__main__':
     print(sjrq)
     #取最新交易日的前一天取随机
     hq_gmqd_5000(sjrq)
-    print(ZddfGmGp(hq_sgjyr(sjrq)).hq_zddfgp() )
+    ZddfGmGp(hq_sgjyr(sjrq)).hq_zddfgp() 
     bs.logout()
 
 
